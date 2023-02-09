@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="container mx-auto code">
+  <center>
+  <div>
+    <p class="text-2xl">MrYhatoh's SMK Stuff</p>
+  </div>
+  </center>
+  <div class="container">
+    <div class="col-span-3 border-b-4 border-black">
+      <p class="text-lg"><b>About it</b></p>
+      <p>This webpage has the objective to be helpful not as a replacement of the official website, the main idea is to make a few tools that I have in mind (or maybe more in the future) to make some stuff faster.</p>
+    </div>
+    <p class="text-lg"><b>Standard Calculator</b></p>
+    <div class="grid grid-cols-2">
+      <div>
+        <span>Type your BL</span>
+        <input type="text" name="time_bl" class="w-full block bg-white border border-black rounded-md pl-1 py-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="MM:SS.XX"/> 
+        <select id="course_bl" class="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>Choose a course</option>
+          <option value=2>MC1</option>
+          <option value=4>DP1</option>
+          <option value=6>GV1</option>
+          <option value=8>BC1</option>
+          <option value=10>MC2</option>
+          <option value=12>CI1</option>
+          <option value=14>GV2</option>
+          <option value=16>DP2</option>
+          <option value=18>BC2</option>
+          <option value=20>MC3</option>
+          <option value=22>KB1</option>
+          <option value=24>CI2</option>
+          <option value=26>VL1</option>
+          <option value=28>BC3</option>
+          <option value=30>MC4</option>
+          <option value=32>DP3</option>
+          <option value=34>KB2</option>
+          <option value=36>GV3</option>
+          <option value=38>VL2</option>
+          <option value=40>RR</option>
+        </select>
+        <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" onclick="calculate(0)">Get your Standard!</button>
+        <div>
+          <p><b> BL</b></p>
+          <p> Standard: <div id="std_bl">  </div></p>
+          <p> Points: <div id="pts_bl">  </div></p>
+        </div>
+      </div>
+      <div>
+        <span>Type your B5</span>
+        <input type="text" name="time_b5" class="w-full block bg-white border border-black rounded-md pl-1 py-2 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="MM:SS.XX"/> 
+        <select id="course_b5" class="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>Choose a course</option>
+          <option value=2>MC1</option>
+          <option value=4>DP1</option>
+          <option value=6>GV1</option>
+          <option value=8>BC1</option>
+          <option value=10>MC2</option>
+          <option value=12>CI1</option>
+          <option value=14>GV2</option>
+          <option value=16>DP2</option>
+          <option value=18>BC2</option>
+          <option value=20>MC3</option>
+          <option value=22>KB1</option>
+          <option value=24>CI2</option>
+          <option value=26>VL1</option>
+          <option value=28>BC3</option>
+          <option value=30>MC4</option>
+          <option value=32>DP3</option>
+          <option value=34>KB2</option>
+          <option value=36>GV3</option>
+          <option value=38>VL2</option>
+          <option value=40>RR</option>
+        </select>
+        <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" onclick="calculate(1)">Get your Standard!</button>
+
+        <div>
+          <p><b> B5</b></p>
+          <p> Standard: <div id="std_b5">  </div></p>
+          <p> Points: <div id="pts_b5">  </div></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function calculate(type) {
+      fetch('./info.json')
+        .then(response => response.json())
+        .then(data => {
+          let re = /^(([1-9]?)[0-9]:)?[0-9][0-9].[0-9][0-9]?/
+          
+          if(type === 1) {
+            let time = document.getElementsByName("time_b5")[0].value
+
+            let course = document.getElementById("course_b5").value
+            if(!re.test(time)) {
+              alert("Bad format, the correct format is (MM):SS.XX")
+              return
+            }
+            if("2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40".indexOf(course) === -1) {
+              alert("Select a course")
+              return 
+            }
+            time = time.split(/[:.]/)
+            time = time.map((cur, index) => {
+              if(index == 0) return cur
+              return cur + (cur.length === 1 ? "0" : "")
+            })
+            let B5 = data["times"][course][0].map((to_beat) => {
+              if(to_beat === "*") return 1
+              to_beat = to_beat.split(/[:.]/)
+
+              to_beat = to_beat.map((cur, index) => {
+                if(index == 0) return cur
+                return cur + (cur.length === 1 ? "0" : "")
+              })
+              if(to_beat.length < time.length) return 0
+              if(Number((time[0].length == 1 ? "0" : "") + time[0]) < Number(to_beat[0])) return 1
+              else if(Number(time[0]) === Number(to_beat[0])) {
+                if(Number(time[1]) < Number(to_beat[1] + (to_beat[1].length == 1 ? "0" : ""))) return 1
+                else if(Number(time[1]) === Number(to_beat[1] + (to_beat[1].length == 1 ? "0" : "")) && time.length > 2) {
+                  if(Number(time[2] + (time[2].length == 1 ? "0" : "")) < Number(to_beat[2] + (to_beat[2].length == 1 ? "0" : ""))) return 1 
+                }
+              }
+              return 0
+            })
+            var std_b5 = document.getElementById("std_b5")
+            var pts_b5 = document.getElementById("pts_b5")
+            std_b5.innerHTML = data["std"][B5.indexOf(1)]
+            pts_b5.innerHTML = data["points"][B5.indexOf(1)]
+            return
+          }
+          let time = document.getElementsByName("time_bl")[0].value
+         
+          let course = document.getElementById("course_bl").value
+          if(!re.test(time)) {
+            alert("Bad format, the correct format is (MM):SS.XX")
+            return
+          }
+          if("2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40".indexOf(course) === -1) {
+            alert("Select a course")
+            return 
+          }
+          time = time.split(/[:.]/)
+          time = time.map((cur, index) => {
+            if(index == 0) return cur
+            return cur + (cur.length === 1 ? "0" : "")
+          })
+          let BL = data["times"][course][1].map((to_beat) => {
+            if(to_beat === "*") return 1
+            to_beat = to_beat.split(/[:.]/)
+
+            to_beat = to_beat.map((cur, index) => {
+              if(index == 0) return cur
+              return cur + (cur.length === 1 ? "0" : "")
+            })
+            if(to_beat.length < time.length) return 0
+            if(Number(time[0]) < Number(to_beat[0])) return 1
+            else if(Number(time[0]) === Number(to_beat[0])) {
+              if(Number(time[1]) < Number(to_beat[1])) return 1
+              else if(Number(time[1]) === Number(to_beat[1]) && time.length > 2) {
+                if(Number(time[2]) < Number(to_beat[2])) return 1 
+              }
+            }
+            return 0
+          }).indexOf(1)
+          var std_bl = document.getElementById("std_bl")
+          var pts_bl = document.getElementById("pts_bl")
+          std_bl.innerHTML = data["std"][BL]
+          pts_bl.innerHTML = data["points"][BL]
+        })
+        .catch(error => console.log(error));
+    }
+  </script>
+</body>
+</html>
